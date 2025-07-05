@@ -1,0 +1,22 @@
+" --- Essencial para o Vim e gerenciamento de plugins ---
+set nocompatible              " Be iMproved, required
+filetype plugin indent on     " Required for Vimwiki and other plugins
+syntax on                     " Enable syntax highlighting
+
+" --- Configuração do Vim-Plug ---
+call plug#begin('~/.vim/plugged')
+Plug 'vimwiki/vimwiki'
+call plug#end()
+
+" --- Configurações ESPECÍFICAS do Vimwiki para Markdown (.md) ---
+let g:vimwiki_global_ext = 0 " Desativa extensões automáticas para todos os wikis se você tiver múltiplos
+let g:vimwiki_list = [{
+    \ 'path': '~/Documents/Vimwiki',
+    \ 'syntax': 'markdown',
+    \ 'ext': '.md'
+    \ }]
+
+" --- Outras configurações personalizadas do Vim (opcional) ---
+" Exemplo: set number, set autoindent, etc.
+" set number
+" set autoindent
