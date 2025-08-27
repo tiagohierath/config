@@ -2,7 +2,10 @@
 set nocompatible              " Be iMproved, required
 filetype plugin indent on     " Required for Vimwiki and other plugins
 syntax on                     " Enable syntax highlighting
-
+set relativenumber
+set number
+set ruler
+set spelllang=pt_br
 " --- Configuração do Vim-Plug ---
 call plug#begin('~/.vim/plugged')
 Plug 'vimwiki/vimwiki'
@@ -11,12 +14,29 @@ call plug#end()
 " --- Configurações ESPECÍFICAS do Vimwiki para Markdown (.md) ---
 let g:vimwiki_global_ext = 0 " Desativa extensões automáticas para todos os wikis se você tiver múltiplos
 let g:vimwiki_list = [{
-    \ 'path': '~/Documents/Vimwiki',
+    \ 'path': '/home/tiagohierath/wiki/',
     \ 'syntax': 'markdown',
     \ 'ext': '.md'
     \ }]
 
-" --- Outras configurações personalizadas do Vim (opcional) ---
-" Exemplo: set number, set autoindent, etc.
-" set number
-" set autoindent
+set wrap
+set linebreak
+set noswapfile
+
+
+" Para Vim-plug
+call plug#begin('~/.vim/plugged') " Ou o caminho onde seus plugins serão instalados
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'kaarmu/typst.vim', {'for': 'typst'}
+call plug#end()
+
+" Mapeamento para abrir arquivos
+nnoremap <C-p> :Files<CR>
+
+" Mapeamento para alternar entre buffers
+nnoremap <Leader>b :Buffers<CR>
+
+" Mapeamento para buscar linhas no buffer atual
+nnoremap <Leader>l :BLines<CR>
+ 
