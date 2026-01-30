@@ -1,42 +1,51 @@
-" --- Essencial para o Vim e gerenciamento de plugins ---
-set nocompatible              " Be iMproved, required
-filetype plugin indent on     " Required for Vimwiki and other plugins
-syntax on                     " Enable syntax highlighting
-set relativenumber
-set number
-set ruler
-set spelllang=pt_br
-" --- Configuração do Vim-Plug ---
 call plug#begin('~/.vim/plugged')
-Plug 'vimwiki/vimwiki'
-call plug#end()
 
-" --- Configurações ESPECÍFICAS do Vimwiki para Markdown (.md) ---
-let g:vimwiki_global_ext = 0 " Desativa extensões automáticas para todos os wikis se você tiver múltiplos
-let g:vimwiki_list = [{
-    \ 'path': '/home/tiagohierath/wiki/',
-    \ 'syntax': 'markdown',
-    \ 'ext': '.md'
-    \ }]
-
-set wrap
-set linebreak
-set noswapfile
-
-
-" Para Vim-plug
-call plug#begin('~/.vim/plugged') " Ou o caminho onde seus plugins serão instalados
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'kaarmu/typst.vim', {'for': 'typst'}
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
 call plug#end()
 
-" Mapeamento para abrir arquivos
 nnoremap <C-p> :Files<CR>
 
-" Mapeamento para alternar entre buffers
-nnoremap <Leader>b :Buffers<CR>
+set noswapfile
+set nobackup
+set nowritebackup
+set number
+set relativenumber
+set updatecount=0
 
-" Mapeamento para buscar linhas no buffer atual
-nnoremap <Leader>l :BLines<CR>
- 
+set wrap 
+set linebreak
+
+"Airline {
+let g:airline_theme='simple'
+" }
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline_powerline_fonts = 1
+let g:fzf_action = {
+  \ 'enter': 'tabedit',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \ }
+
+
+" Ctrl+T = nova tab (como Firefox)
+nnoremap <C-t> :tabnew<CR>
+
+" Ctrl+W = fechar tab (como Firefox)
+nnoremap <C-w> :tabclose<CR>
+
+" Alt+Número = mudar para tab específica
+nnoremap <M-1> 1gt
+nnoremap <M-2> 2gt
+nnoremap <M-3> 3gt
+nnoremap <M-4> 4gt
+nnoremap <M-5> 5gt
+nnoremap <M-6> 6gt
+nnoremap <M-7> 7gt
+nnoremap <M-8> 8gt
+nnoremap <M-9> 9gt
