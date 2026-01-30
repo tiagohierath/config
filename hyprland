@@ -1,4 +1,3 @@
-HYPRLAND
 # Refer to the wiki for more information.
 # https://wiki.hyprland.org/Configuring/
 
@@ -13,6 +12,7 @@ HYPRLAND
 
 # See https://wiki.hyprland.org/Configuring/Monitors/
 monitor=,preferred,auto,1
+monitor = HDMI-A-1, preferred, auto, 1, mirror, eDP-1
 
 
 ###################
@@ -23,7 +23,6 @@ monitor=,preferred,auto,1
 
 # Set programs that you use
 $terminal = kitty
-$terminal2 = cool-retro-term
 $fileManager = yazi
 $menu = dmenu --show drun
 $browser = firefox
@@ -34,11 +33,12 @@ $drawing = krita
 #################
 
 # Autostart necessary processes (like notifications daemons, status bars, etc.)
-exec-once = hyprpaper & mako & udiskie
-exec-once = sleep 1 && waybar
+exec-once = hyprpaper & mako & udiskie & firefox & waybar &
+exec-once = sleep 1 &
 exec-once = hypridle &
 exec-once = systemctl --user start opentabletdriver.service
-exec-once = waypaper &
+
+
 #############################
 ### ENVIRONMENT VARIABLES ###
 #############################
@@ -75,20 +75,21 @@ env = fileManager,yazi
 
 # https://wiki.hyprland.org/Configuring/Variables/#general
 general {
-	gaps_in = 4
-		gaps_out = 4
+	gaps_in = 0
+		gaps_out = 0
 
-		border_size = 2
+		border_size = 3
 # https://wiki.hyprland.org/Configuring/Variables/#variable-types for info about colors
-		col.active_border = 0xFF000000
-		col.inactive_border = 0x80FFFFFF
+		col.active_border = 0x80FFFFFF
+		col.inactive_border = 0xFF000000
+
 # Set to true enable resizing windows by clicking and dragging on borders and gaps
 		resize_on_border = true
 
 # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
 		allow_tearing = false
 
-		layout = dwindle
+		layout = dwindle 
 }
 
 # https://wiki.hyprland.org/Configuring/Variables/#decoration
@@ -98,7 +99,7 @@ decoration {
 
 # Change transparency of focused and unfocused windows
 		active_opacity = 1
-		inactive_opacity = 0.9
+		inactive_opacity = 1
 
 		shadow {
 			enabled = false
@@ -109,8 +110,8 @@ decoration {
 
 # https://wiki.hyprland.org/Configuring/Variables/#blur
 	blur {
-		enabled = false
-			size = 3
+		enabled = no
+			size = 10
 			passes = 1
 
 			vibrancy = 0.1696
@@ -119,11 +120,26 @@ decoration {
 
 # https://wiki.hyprland.org/Configuring/Variables/#animations
 animations {
-  enabled = no 
+  enabled = no
+  bezier = wind, 0.05, 0.9, 0.1, 1.05
+  bezier = winIn, 0.76, 0.42, 0.74, 0.87
+  bezier = winOut, 0.76, 0.42, 0.74, 0.87
+  bezier = workIn, 0.72, -0.07, 0.41, 0.98
+  bezier = linear, 1, 1, 1, 1
+
+  animation = windows, 1, 2, workIn, slide
+  animation = windowsIn, 1, 2, workIn, slide
+  animation = windowsOut, 1, 2, workIn, slide
+  animation = windowsMove, 1, 2, winIn, slide
+
+  animation = fadeIn, 1, 2, winIn
+  animation = fadeOut, 1, 2, winOut
+
+  animation = workspaces, 1, 2, workIn, slidevert
+  animation = specialWorkspace, 1, 2, workIn, slidevert
 }
 
 
-workspace = 1, gapsin:5, gapsout:10
 
 dwindle {
     pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
@@ -168,14 +184,12 @@ input {
     
     # Configurações de aceleração unificadas
     accel_profile = flat
+
     
 }
 
 
 # https://wiki.hyprland.org/Configuring/Variables/#gestures
-gestures {
-    workspace_swipe = false
-}
 
 # Example per-device config
 # See https://wiki.hyprland.org/Configuring/Keywords/#per-device-input-configs for more
@@ -194,18 +208,20 @@ device {
 $mainMod = SUPER # Sets "Windows" key as main modifier
 
 # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
-bind = $mainMod, T, exec, $terminal
-bind = $mainMod, Y, exec, $terminal2
+bind = $mainMod, RETURN, exec, $terminal
 bind = $mainMod, Q, killactive,
-bind = $mainMod, E, exec, kitty yazi 
+
+bind = $mainMod, E, exec, kitty -e "yazi"
+
 bind = $mainMod, V, togglefloating,
 bind = $mainMod, R, exec, dmenu_run
 bind = $mainMod, H, exec, $browser
 bind = $mainMod, u, togglesplit, # dwindle
 bind = ALT, Tab, cyclenext,
 bind = Alt, Tab, bringactivetotop,
-bind = $mainMod, K, exec, $drawing
+bind = $mainMod, K, exec, vesktop
 bind = $mainMod, Y, exec, kitty vim
+bind = $mainMod, J, exec, obsidian
 
 # PRINT
 bind = SUPER, Print, exec, grimblast --freeze copysave area
@@ -223,13 +239,19 @@ bind = $mainMod, 9, workspace, 9
 bind = $mainMod, 0, workspace, 10
 
 # Brightness control
-bind = , XF86MonBrightnessUp, exec, brightnessctl set +5%
-bind = , XF86MonBrightnessDown, exec, brightnessctl set 5%-
+bind = , F7, exec, brightnessctl set +5%
+bind = , F6, exec, brightnessctl set 5%-
+
+# Aumentar luz do teclado
+bind = , F8, exec, brightnessctl -d dell::kbd_backlight set +1
+
+# Diminuir luz do teclado
+bind = , F9, exec, brightnessctl -d dell::kbd_backlight set 1-
 
 # pamixer audio keys
-bind = , F1, exec, pamixer -d 5
-bind = , F2, exec, pamixer -i 5
-bind = , F3, exec, pamixer -t
+bind = , F2, exec, pamixer -d 5
+bind = , F3, exec, pamixer -i 5
+bind = , F1, exec, pamixer -t
 
 # Move active window to a workspace with mainMod + SHIFT + [0-9]
 bind = $mainMod SHIFT, 1, movetoworkspace, 1
@@ -243,8 +265,8 @@ bind = $mainMod SHIFT, 8, movetoworkspace, 8
 bind = $mainMod SHIFT, 9, movetoworkspace, 9
 
 # Scroll through existing workspaces with mainMod + scroll
-bind = $mainMod, mouse_down, workspace, e+1
-bind = $mainMod, mouse_up, workspace, e-1
+bind = $mainMod, mouse_up, workspace, e+1
+bind = $mainMod, mouse_down, workspace, e-1
 
 # Move/resize windows with mainMod + LMB/RMB and dragging
 bindm = $mainMod, mouse:272, movewindow
@@ -279,9 +301,8 @@ bindl = , XF86AudioPrev, exec, playerctl previous
 # Example windowrule
 # windowrule = float,class:^(kitty)$,title:^(kitty)$
 
-# Ignore maximize requests from apps. You'll probably like this.
-windowrule = suppressevent maximize, class:.*
+
 
 # Fix some dragging issues with XWayland
-windowrule = nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0
-[tiagohierath@tiagohierath ~]$ 
+
+exec-once = mpv --really-quiet /home/tiago/Downloads/windows-7-startup.mp3
